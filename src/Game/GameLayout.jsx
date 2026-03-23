@@ -52,4 +52,3 @@ GameLayout.propTypes = {
 	setField: PropTypes.func.isRequired,
 	handleRestart: PropTypes.func.isRequired,
 };
-//: PropTypes.func,
