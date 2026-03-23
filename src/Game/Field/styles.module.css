@@ -1,0 +1,44 @@
+.ButtonsContainer {
+	width: 400px;
+	height: 400px;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px;
+	padding: 8px;
+	background: linear-gradient(135deg, #b0b4c8 0%, #edecee 100%);
+	border-radius: 20px;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+	position: relative;
+	overflow: hidden;
+}
+
+.button {
+	width: calc(33.333% - 4px);
+	height: calc(33.333% - 4px);
+	background: white;
+	border-radius: 12px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 2rem;
+	font-weight: bold;
+	cursor: pointer;
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	user-select: none;
+	position: relative;
+	overflow: hidden;
+	border: none;
+	outline: none;
+}
+
+.button:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+	background: #f8f9fa;
+}
+
+.button:active {
+	transform: translateY(0);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
