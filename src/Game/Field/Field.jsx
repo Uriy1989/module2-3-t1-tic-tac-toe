@@ -1,7 +1,8 @@
 import { FieldLayout } from './FieldLayout.jsx';
+import { store } from '../../store.js';
 
+//field,
 export const Field = ({
-	field,
 	setField,
 	currentPlayer,
 	setCurrentPlayer,
@@ -9,6 +10,19 @@ export const Field = ({
 	setIsGameEnded,
 	setIsDraw,
 }) => {
+	//setField
+	//setCurrentPlayer
+	//setIsGameEnded
+	//setIsDraw
+
+	// store.dispatch({ type: 'SET_FIELD', payload: userDataFromServer });
+	// store.dispatch({ type: 'SET_CURRENT_PLAYER', payload: userDataFromServer });
+	// store.dispatch({ type: 'SET_IS_GAME_ENDED', payload: userDataFromServer });
+	// store.dispatch({ type: 'SET_IS_DRAW', payload: userDataFromServer });
+
+	const { field } = store.getState();
+	console.log('field ===', field);
+
 	const WIN_PATTERNS = [
 		[0, 1, 2],
 		[3, 4, 5],
@@ -49,7 +63,10 @@ export const Field = ({
 	const updateField = (index) => {
 		const newField = [...field];
 		newField[index] = currentPlayer;
-		setField(newField);
+
+		store.dispatch({ type: 'SET_FIELD', payload: newField });
+
+		//setField(newField);//
 		return newField;
 	};
 

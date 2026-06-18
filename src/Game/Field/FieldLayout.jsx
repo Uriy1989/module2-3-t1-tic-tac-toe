@@ -1,6 +1,12 @@
 import styles from './styles.module.css';
 
-export const FieldLayout = ({ field, handlerClick }) => {
+import { store } from '../../store';
+
+export const FieldLayout = ({ handlerClick }) => {
+	//({ field, handlerClick }) => {
+	const { field } = store.getState();
+	console.log('field ===', field);
+
 	return (
 		<>
 			<div className={styles.ButtonsContainer}>

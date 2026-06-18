@@ -3,6 +3,8 @@ import { Field } from './Field/Field';
 import styles from './styles.module.css';
 import PropTypes from 'prop-types';
 
+import { store } from '../store';
+
 export const GameLayout = ({
 	currentPlayer,
 	setCurrentPlayer,
