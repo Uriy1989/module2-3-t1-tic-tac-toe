@@ -1,27 +1,8 @@
 import { FieldLayout } from './FieldLayout.jsx';
 import { store } from '../../store.js';
 
-//field,
-export const Field = ({
-	setField,
-	currentPlayer,
-	setCurrentPlayer,
-	isGameEnded,
-	setIsGameEnded,
-	setIsDraw,
-}) => {
-	//setField
-	//setCurrentPlayer
-	//setIsGameEnded
-	//setIsDraw
-
-	// store.dispatch({ type: 'SET_FIELD', payload: userDataFromServer });
-	// store.dispatch({ type: 'SET_CURRENT_PLAYER', payload: userDataFromServer });
-	// store.dispatch({ type: 'SET_IS_GAME_ENDED', payload: userDataFromServer });
-	// store.dispatch({ type: 'SET_IS_DRAW', payload: userDataFromServer });
-
-	const { field } = store.getState();
-	console.log('field ===', field);
+export const Field = ({ handleRender }) => {
+	const { field, currentPlayer, isGameEnded } = store.getState();
 
 	const WIN_PATTERNS = [
 		[0, 1, 2],
@@ -45,7 +26,7 @@ export const Field = ({
 			checkWin(newField, WIN_PATTERNS, 'X') ||
 			checkWin(newField, WIN_PATTERNS, 'O')
 		) {
-			setIsGameEnded(true);
+			store.dispatch({ type: 'SET_IS_GAME_ENDED', payload: true });
 			return true;
 		}
 		return false;
@@ -54,7 +35,7 @@ export const Field = ({
 	const checkIsDraw = (newField) => {
 		const check = newField.every((field) => field !== '');
 		if (check) {
-			setIsGameEnded(check);
+			store.dispatch({ type: 'SET_IS_GAME_ENDED', payload: check });
 		}
 
 		return check;
@@ -65,8 +46,6 @@ export const Field = ({
 		newField[index] = currentPlayer;
 
 		store.dispatch({ type: 'SET_FIELD', payload: newField });
-
-		//setField(newField);//
 		return newField;
 	};
 
@@ -77,10 +56,14 @@ export const Field = ({
 		const winPlayer = checkWinPlayer(newField);
 
 		if (!winPlayer) {
-			setCurrentPlayer(currentPlayer === 'X' ? 'O' : 'X');
-			setIsDraw(checkIsDraw(newField));
+			store.dispatch({ type: 'SET_CURRENT_PLAYER' });
+			store.dispatch({
+				type: 'SET_IS_DRAW',
+				payload: checkIsDraw(newField),
+			});
 		}
+		handleRender();
 	};
 
-	return <FieldLayout field={field} handlerClick={handlerClick} />;
+	return <FieldLayout handlerClick={handlerClick} />;
 };

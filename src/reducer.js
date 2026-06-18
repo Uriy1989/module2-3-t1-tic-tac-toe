@@ -1,9 +1,4 @@
-const initialState = {
-	currentPlayer: 'X',
-	isGameEnded: false,
-	isDraw: false,
-	field: ['', '', '', '', '', '', '', '', ''],
-};
+import { initialState } from './initialState';
 
 export const appReducer = (state = initialState, action) => {
 	const { type, payload } = action;
@@ -18,7 +13,7 @@ export const appReducer = (state = initialState, action) => {
 		case 'SET_CURRENT_PLAYER': {
 			return {
 				...state,
-				currentPlayer: payload,
+				currentPlayer: state.currentPlayer === 'X' ? 'O' : 'X',
 			};
 		}
 		case 'SET_IS_GAME_ENDED': {

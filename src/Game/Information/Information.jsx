@@ -1,6 +1,10 @@
 import { InformationLayout } from './InformationLayout.jsx';
 
-export const Information = ({ isGameEnded, isDraw, currentPlayer }) => {
+import { store } from '../../store.js';
+
+export const Information = () => {
+	const { isGameEnded, isDraw, currentPlayer } = store.getState();
+
 	const informationText = isDraw
 		? 'Ничья'
 		: isGameEnded

@@ -3,9 +3,7 @@ import styles from './styles.module.css';
 import { store } from '../../store';
 
 export const FieldLayout = ({ handlerClick }) => {
-	//({ field, handlerClick }) => {
 	const { field } = store.getState();
-	console.log('field ===', field);
 
 	return (
 		<>
