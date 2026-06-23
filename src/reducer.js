@@ -1,6 +1,6 @@
 import { initialState } from './initialState';
 
-export const appReducer = (state = initialState, action) => {
+export const reducer = (state = initialState, action) => {
 	const { type, payload } = action;
 
 	switch (type) {
