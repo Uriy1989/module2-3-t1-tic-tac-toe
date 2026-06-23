@@ -1,8 +1,24 @@
 import { FieldLayout } from './FieldLayout.jsx';
-import { store } from '../../store.js';
+//import { store } from '../../store.js';
+import { useSelector, useDispatch } from 'react-redux';
 
-export const Field = ({ handleRender }) => {
-	const { field, currentPlayer, isGameEnded } = store.getState();
+import {
+	selectField,
+	selectCurrentPlayer,
+	selectIsGameEnded,
+} from '../selectors'; // selectIsDraw,
+
+export const Field = () => {
+	//{ handleRender }
+	/*const { field, currentPlayer, isGameEnded } = store.getState();*/
+
+	const field = useSelector(selectField);
+	const currentPlayer = useSelector(selectCurrentPlayer);
+	const isGameEnded = useSelector(selectIsGameEnded);
+
+	const dispatch = useDispatch();
+
+	console.log('field = ', field);
 
 	const WIN_PATTERNS = [
 		[0, 1, 2],
@@ -26,7 +42,7 @@ export const Field = ({ handleRender }) => {
 			checkWin(newField, WIN_PATTERNS, 'X') ||
 			checkWin(newField, WIN_PATTERNS, 'O')
 		) {
-			store.dispatch({ type: 'SET_IS_GAME_ENDED', payload: true });
+			dispatch({ type: 'SET_IS_GAME_ENDED', payload: true });
 			return true;
 		}
 		return false;
@@ -35,7 +51,7 @@ export const Field = ({ handleRender }) => {
 	const checkIsDraw = (newField) => {
 		const check = newField.every((field) => field !== '');
 		if (check) {
-			store.dispatch({ type: 'SET_IS_GAME_ENDED', payload: check });
+			dispatch({ type: 'SET_IS_GAME_ENDED', payload: check });
 		}
 
 		return check;
@@ -45,7 +61,7 @@ export const Field = ({ handleRender }) => {
 		const newField = [...field];
 		newField[index] = currentPlayer;
 
-		store.dispatch({ type: 'SET_FIELD', payload: newField });
+		dispatch({ type: 'SET_FIELD', payload: newField });
 		return newField;
 	};
 
@@ -56,13 +72,13 @@ export const Field = ({ handleRender }) => {
 		const winPlayer = checkWinPlayer(newField);
 
 		if (!winPlayer) {
-			store.dispatch({ type: 'SET_CURRENT_PLAYER' });
-			store.dispatch({
+			dispatch({ type: 'SET_CURRENT_PLAYER' });
+			dispatch({
 				type: 'SET_IS_DRAW',
 				payload: checkIsDraw(newField),
 			});
 		}
-		handleRender();
+		//handleRender();//после импортировать action
 	};
 
 	return <FieldLayout handlerClick={handlerClick} />;
