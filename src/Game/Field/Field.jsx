@@ -1,24 +1,25 @@
 import { FieldLayout } from './FieldLayout.jsx';
-//import { store } from '../../store.js';
 import { useSelector, useDispatch } from 'react-redux';
 
 import {
 	selectField,
 	selectCurrentPlayer,
 	selectIsGameEnded,
-} from '../selectors'; // selectIsDraw,
+} from '../selectors';
+
+import {
+	setIsGameEnded,
+	setFiled,
+	setIsDraw,
+	SET_CURRENT_PLAYER,
+} from '../actions';
 
 export const Field = () => {
-	//{ handleRender }
-	/*const { field, currentPlayer, isGameEnded } = store.getState();*/
-
 	const field = useSelector(selectField);
 	const currentPlayer = useSelector(selectCurrentPlayer);
 	const isGameEnded = useSelector(selectIsGameEnded);
 
 	const dispatch = useDispatch();
-
-	console.log('field = ', field);
 
 	const WIN_PATTERNS = [
 		[0, 1, 2],
@@ -42,7 +43,7 @@ export const Field = () => {
 			checkWin(newField, WIN_PATTERNS, 'X') ||
 			checkWin(newField, WIN_PATTERNS, 'O')
 		) {
-			dispatch({ type: 'SET_IS_GAME_ENDED', payload: true });
+			dispatch(setIsGameEnded(true));
 			return true;
 		}
 		return false;
@@ -51,7 +52,7 @@ export const Field = () => {
 	const checkIsDraw = (newField) => {
 		const check = newField.every((field) => field !== '');
 		if (check) {
-			dispatch({ type: 'SET_IS_GAME_ENDED', payload: check });
+			dispatch(setIsGameEnded(check));
 		}
 
 		return check;
@@ -61,7 +62,7 @@ export const Field = () => {
 		const newField = [...field];
 		newField[index] = currentPlayer;
 
-		dispatch({ type: 'SET_FIELD', payload: newField });
+		dispatch(setFiled(newField));
 		return newField;
 	};
 
@@ -72,14 +73,9 @@ export const Field = () => {
 		const winPlayer = checkWinPlayer(newField);
 
 		if (!winPlayer) {
-			dispatch({ type: 'SET_CURRENT_PLAYER' });
-			dispatch({
-				type: 'SET_IS_DRAW',
-				payload: checkIsDraw(newField),
-			});
+			dispatch(SET_CURRENT_PLAYER);
+			dispatch(setIsDraw(checkIsDraw(newField)));
 		}
-		//handleRender();//после импортировать action
 	};
-
 	return <FieldLayout handlerClick={handlerClick} />;
 };

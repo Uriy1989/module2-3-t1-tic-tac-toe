@@ -1,10 +1,8 @@
 import styles from './styles.module.css';
-
-import { store } from '../../store';
-
+import { useSelector } from 'react-redux';
+import { selectField } from '../selectors';
 export const FieldLayout = ({ handlerClick }) => {
-	const { field } = store.getState();
-
+	const field = useSelector(selectField);
 	return (
 		<>
 			<div className={styles.ButtonsContainer}>
