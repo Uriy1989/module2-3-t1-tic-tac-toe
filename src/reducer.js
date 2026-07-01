@@ -5,11 +5,18 @@ export const reducer = (state = initialState, action) => {
 
 	switch (type) {
 		case 'SET_FIELD': {
+			const index = state.currentIndex;
+			if (state.field[index] !== '') {
+				return state;
+			}
+			const newField = [...state.field];
+			newField[index] = state.currentPlayer;
 			return {
 				...state,
-				field: payload,
+				field: newField,
 			};
 		}
+
 		case 'SET_CURRENT_PLAYER': {
 			return {
 				...state,
@@ -30,6 +37,12 @@ export const reducer = (state = initialState, action) => {
 		}
 		case 'RESTART_GAME': {
 			return initialState;
+		}
+		case 'SET_CURRENT_INDEX': {
+			return {
+				...state,
+				currentIndex: payload,
+			};
 		}
 
 		default:

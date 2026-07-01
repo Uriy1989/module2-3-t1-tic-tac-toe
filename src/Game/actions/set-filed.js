@@ -1,1 +1,1 @@
-export const setFiled = (field) => ({ type: 'SET_FIELD', payload: field });
+export const SET_FIELD = { type: 'SET_FIELD' };

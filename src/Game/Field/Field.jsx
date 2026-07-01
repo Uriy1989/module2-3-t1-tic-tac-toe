@@ -1,5 +1,6 @@
 import { FieldLayout } from './FieldLayout.jsx';
 import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
 
 import {
 	selectField,
@@ -9,10 +10,33 @@ import {
 
 import {
 	setIsGameEnded,
-	setFiled,
 	setIsDraw,
 	SET_CURRENT_PLAYER,
+	setCurrentIndex,
+	SET_FIELD,
 } from '../actions';
+
+const WIN_PATTERNS = [
+	[0, 1, 2],
+	[3, 4, 5],
+	[6, 7, 8],
+	[0, 3, 6],
+	[1, 4, 7],
+	[2, 5, 8],
+	[0, 4, 8],
+	[2, 4, 6],
+];
+
+const checkWin = (array, patterns, symbol) => {
+	return patterns.some((pattern) =>
+		pattern.every((index) => array[index] === symbol),
+	);
+};
+
+const checkWinPlayer = (field) =>
+	checkWin(field, WIN_PATTERNS, 'X') || checkWin(field, WIN_PATTERNS, 'O');
+
+const checkIsDraw = (field) => field.every((cell) => cell !== '');
 
 export const Field = () => {
 	const field = useSelector(selectField);
@@ -21,61 +45,38 @@ export const Field = () => {
 
 	const dispatch = useDispatch();
 
-	const WIN_PATTERNS = [
-		[0, 1, 2],
-		[3, 4, 5],
-		[6, 7, 8], // Варианты побед по горизонтали
-		[0, 3, 6],
-		[1, 4, 7],
-		[2, 5, 8], // Варианты побед по вертикали
-		[0, 4, 8],
-		[2, 4, 6], // Варианты побед по диагонали
-	];
-
-	const checkWin = (array, patterns, symbol) => {
-		return patterns.some((pattern) =>
-			pattern.every((index) => array[index] === symbol),
-		);
-	};
-
-	const checkWinPlayer = (newField) => {
-		if (
-			checkWin(newField, WIN_PATTERNS, 'X') ||
-			checkWin(newField, WIN_PATTERNS, 'O')
-		) {
-			dispatch(setIsGameEnded(true));
-			return true;
-		}
-		return false;
-	};
-
-	const checkIsDraw = (newField) => {
-		const check = newField.every((field) => field !== '');
-		if (check) {
-			dispatch(setIsGameEnded(check));
-		}
-
-		return check;
-	};
-
-	const updateField = (index) => {
-		const newField = [...field];
-		newField[index] = currentPlayer;
-
-		dispatch(setFiled(newField));
-		return newField;
-	};
-
 	const handlerClick = (index) => {
 		if (isGameEnded || field[index] !== '') return;
 
-		const newField = updateField(index);
-		const winPlayer = checkWinPlayer(newField);
-
-		if (!winPlayer) {
-			dispatch(SET_CURRENT_PLAYER);
-			dispatch(setIsDraw(checkIsDraw(newField)));
-		}
+		dispatch(setCurrentIndex(index));
+		dispatch(SET_FIELD);
 	};
+
+	useEffect(() => {
+		if (isGameEnded) return;
+
+		const winner = checkWinPlayer(field);
+		if (winner) {
+			dispatch(setIsGameEnded(true));
+			return;
+		}
+
+		const draw = checkIsDraw(field);
+		if (draw) {
+			dispatch(setIsDraw(true));
+			dispatch(setIsGameEnded(true));
+			return;
+		}
+
+		dispatch(SET_CURRENT_PLAYER);
+	}, [
+		field,
+		isGameEnded,
+		dispatch,
+		setIsGameEnded,
+		setIsDraw,
+		SET_CURRENT_PLAYER,
+	]);
+
 	return <FieldLayout handlerClick={handlerClick} />;
 };

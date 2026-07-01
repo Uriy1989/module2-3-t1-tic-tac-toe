@@ -3,4 +3,5 @@ export const initialState = {
 	isGameEnded: false,
 	isDraw: false,
 	field: ['', '', '', '', '', '', '', '', ''],
+	currentIndex: null,
 };
